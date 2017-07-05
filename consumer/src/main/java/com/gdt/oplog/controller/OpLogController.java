@@ -1,4 +1,4 @@
-package com.gdt.oplog.controller;
+/*package com.gdt.oplog.controller;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -56,3 +56,4 @@ public class OpLogController {
 	}
 	
 }
+*/

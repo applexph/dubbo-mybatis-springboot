@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gdt.mapper.EntMapper">
+	<select id="queryEntInfo" parameterType="String" resultType="com.gdt.entity.ent.EntModel">
+		SELECT
+			*
+		FROM
+			t_log_hash
+		WHERE
+			id = #{id}
+	</select>
+	<select id="queryPowerMonth" resultType="map">
+		select e.ent_name ,e.res_man ,e.detail_addr,e.ent_property,
+		 e.conn_phone,c.b001 as 'power' ,c.b001*0.758 as 'co2' ,c.b001*0.0001/1.229 as 'savepower' ,avg(c.b002) as 'load' 
+		from t_log_hash as e left join   py_ent_info as a  on e.ent_name=a.ent_name 
+		 left join r_ms  as b  on a.org_code=b.org_code 
+		left join r_his_elecquan_month as c on  c.ms_no=b.ms_no 
+		left join r_ms_prop_rela as d on b.MS_NO=d.MS_NO 
+		 where data_date='201705'
+		and  b.P_MS_NO ='' 
+		AND b.ROOT_FLAG = 0 
+		AND b.VALID_FLAG = 0 
+		AND d.PROP_NO = 'P014' 
+		AND e.id=#{id}
+	</select>
+	<select id="queryCurrMonthMonth" resultType="map">
+		select e.ent_name ,e.res_man ,e.detail_addr  ,e.ent_property  , e.conn_phone,
+		sum(c.b001) as 'power' ,sum(c.b001)*0.758 as 'co2' ,sum(c.b001)*0.0001/1.229 as 'savepower' ,avg(c.b002) as 'load' 
+		from t_log_hash as e 
+		left join py_ent_info as a on e.ent_name=a.ent_name  
+		inner  join r_ms  as b  on a.org_code=b.org_code 
+		left join r_his_elecquan_day as c on  c.ms_no=b.ms_no 
+		left join r_ms_prop_rela as d on b.MS_NO=d.MS_NO 
+		 where month(CURDATE())=month(c.data_date)
+		and  b.P_MS_NO ='' 
+		AND b.ROOT_FLAG = 0 
+		AND b.VALID_FLAG = 0 
+		AND d.PROP_NO = 'P014' 
+		AND e.id=#{id}
+		 group by c.ms_no
+	</select>
+	<select id="queryHashCode" resultType="map">
+		SELECT id FROM t_log_hash WHERE account=#{account} AND pwd=#{password}
+	</select>
+	<select id="queryEnts" resultType="com.gdt.entity.ent.EntModel">
+		SELECT
+			*
+		FROM
+			t_log_hash
+	</select>
+	<insert id="saveEnt">
+		insert into t_log_hash values(#{ent.id},#{ent.account},#{ent.pwd},#{ent.ms_no},#{ent.res_man},#{ent.ent_name},#{ent.ent_property},#{ent.detail_addr},#{ent.conn_phone})
+	</insert>
+	<select id="queryMsNo" resultType="map">
+		SELECT b.MS_NO as 'msno'
+		FROM t_log_hash AS e LEFT JOIN   py_ent_info AS a  ON e.ent_name=a.ent_name 
+		 LEFT JOIN r_ms  AS b  ON a.org_code=b.org_code 
+		LEFT JOIN r_ms_prop_rela AS d ON b.MS_NO=d.MS_NO 
+		WHERE  b.P_MS_NO ='' 
+		AND b.ROOT_FLAG = 0 
+		AND b.VALID_FLAG = 0 
+		AND d.PROP_NO = 'P014' 
+		AND e.ent_name=#{entName}
+	</select>
+</mapper>
