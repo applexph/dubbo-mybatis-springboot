@@ -11,6 +11,6 @@
     <!--zookeeper注册中心 -->
     <dubbo:registry  protocol="zookeeper" address="127.0.0.1:2181" />
     
-    <dubbo:reference id="opLogService" interface="com.gdt.api.OpLogService" />
-
+    <!-- <dubbo:reference id="opLogService" interface="com.gdt.api.OpLogService" /> -->
+	<dubbo:reference id="entService" interface="com.gdt.api.EntService" />
 </beans>

@@ -13,9 +13,15 @@
     <dubbo:protocol name="dubbo" port="20880" />
  
     <!-- 声明需要暴露的服务接口 -->
-    <dubbo:service interface="com.gdt.api.OpLogService" ref="opLogService" />
+    <!--<dubbo:service interface="com.gdt.api.OpLogService" ref="opLogService" /> -->
  
     <!-- 和本地bean一样实现服务 -->
-    <bean id="opLogService" class="com.gdt.oplog.service.OpLogServiceImpl" />
+    <!-- <bean id="opLogService" class="com.gdt.oplog.service.OpLogServiceImpl" /> -->
+    
+    <!-- 声明需要暴露的服务接口 -->
+    <dubbo:service interface="com.gdt.api.EntService" ref="entService" />
+ 
+    <!-- 和本地bean一样实现服务 -->
+    <bean id="entService" class="com.gdt.ent.service.EntServiceImpl" />
  
 </beans>
